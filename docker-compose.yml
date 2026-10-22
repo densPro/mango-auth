@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16
+    command: ["postgres", "-p", "5435"]
+    environment:
+      POSTGRES_USER: mango
+      POSTGRES_PASSWORD: mango
+      POSTGRES_DB: mango_auth
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5435:5435"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -p 5435 -U mango -d mango_auth"]
+      interval: 3s
+      retries: 20
+
+  api:
+    build: .
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8003:8003"
+
+volumes:
+  pgdata:
