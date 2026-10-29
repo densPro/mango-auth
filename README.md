@@ -65,6 +65,25 @@ async def adjust(user: Principal = auth.require_permission("stock:adjust")):
     ...
 ```
 
+## Try it in Postman or Insomnia
+
+Import both files from `postman/`: `mango-auth.postman_collection.json` and
+`mango-auth.postman_environment.json`, then pick the "mango-auth local" environment. Check
+`adminEmail` and `adminPassword` match your `BOOTSTRAP_ADMIN_*` values, then run the whole collection
+in order (Postman Collection Runner, or `newman run` from the CLI). The folders are:
+
+| Folder | What it does |
+|---|---|
+| 0. Meta | health and JWKS |
+| 1. Setup | logs in as the super admin, creates one user per seeded ERP role and assigns the role |
+| 2. Auth flow | login, me, permissions, refresh rotation, replay detection, logout and the error cases |
+| 3. Role matrix | each role logs in to `erp` and `/me` must return exactly the permissions in `seed.py` |
+| 4. Admin API | every admin endpoint, a new app created through the API, deactivation and key rotation |
+
+Each run uses a fresh `runId` so emails and app names never collide, and tokens are stored in the
+environment by the test scripts. Access tokens last 15 minutes, so run it in one go. Lockout is not
+tested. Insomnia needs a version with script support (v11+) for the saved variables and assertions.
+
 ## Starter ERP roles
 Super Admin, Admin, Manager, Accountant, Sales, Warehouse, HR, Viewer (edit freely; seeding never
 overwrites a role that already exists).

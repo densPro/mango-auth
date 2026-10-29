@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "mango-auth (FastAPI)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "mango_auth.main:app_factory",
+        "--factory",
+        "--host", "127.0.0.1",
+        "--port", "8003"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "DATABASE_URL": "postgresql+asyncpg://mango:mango@localhost:5435/mango_auth"
+      },
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "justMyCode": true
+    }
+  ]
+}
